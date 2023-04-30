@@ -60,14 +60,14 @@ namespace Delivery.src
             KeyboardState keyboardState = Keyboard.GetState();
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
-            if (keyboardState.IsKeyDown(Keys.A))
-            {
-                LoadScreen1();
-            }
-            else if (keyboardState.IsKeyDown(Keys.S))
-            {
-                LoadScreen2();
-            }
+            //if (keyboardState.IsKeyDown(Keys.A))
+            //{
+            //    LoadScreen1();
+            //}
+            //else if (keyboardState.IsKeyDown(Keys.S))
+            //{
+            //    LoadScreen2();
+            //}
             // TODO: Add your update logic here
 
             base.Update(gameTime);

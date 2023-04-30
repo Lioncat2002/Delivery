@@ -9,8 +9,7 @@ namespace Delivery.src
         {
             Idle,
             Run,
-            Jumping,
-            Falling
+            Jumping
         }
         public Vector2 position;
         public Rectangle hitbox;

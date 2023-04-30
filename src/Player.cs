@@ -12,8 +12,8 @@ namespace Delivery.src
         public SpriteEffects effects;
 
         public float playerSpeed = 1;
-        public float fallSpeed = 5;
-        public float jumpSpeed = -10;
+        public float fallSpeed = 1;
+        public float jumpSpeed = -2;
         public float startY;
 
         public bool isFalling = true;
@@ -27,38 +27,35 @@ namespace Delivery.src
             playerAnimation = new Animation[3];
 
             this.position = position;
-            velocity = new Vector2();
+            velocity = position;
             effects = SpriteEffects.None;
 
-            playerAnimation[0] = new Animation(idleSprite);
-            playerAnimation[1] = new Animation(runSprite);
-            playerAnimation[2] = new Animation(jumpSprite);
-            hitbox = new Rectangle((int)position.X, (int)position.Y,8, 6);
-            playerFallRect = new Rectangle((int)position.X + 3, (int)position.Y + 8, 6, (int)fallSpeed);
+            playerAnimation[0] = new Animation(idleSprite,8,8);
+            playerAnimation[1] = new Animation(runSprite,8,8);
+            playerAnimation[2] = new Animation(jumpSprite,8,8);
+            hitbox = new Rectangle((int)position.X, (int)position.Y,8, 5);
+            playerFallRect = new Rectangle((int)position.X, (int)position.Y, 6, 6);
         }
         public override void Update()
         {
             KeyboardState keyboard = Keyboard.GetState();
-
+            
 
             playerAnimationController = currentAnimation.Idle;
             position = velocity;
 
-            isShooting = keyboard.IsKeyDown(Keys.Enter);
-
             startY = position.Y;
             Move(keyboard);
             Jump(keyboard);
-
             if (isFalling)
             {
                 velocity.Y += fallSpeed;
-                playerAnimationController = currentAnimation.Falling;
+                playerAnimationController = currentAnimation.Jumping;
             }
             hitbox.X = (int)position.X;
             hitbox.Y = (int)position.Y;
             playerFallRect.X = (int)position.X;
-            playerFallRect.Y = (int)(velocity.Y + 10);
+            playerFallRect.Y = (int)velocity.Y+2;
         }
         private void Move(KeyboardState keyboard)
         {
@@ -67,19 +64,20 @@ namespace Delivery.src
             {
                 velocity.X -= playerSpeed;
                 playerAnimationController = currentAnimation.Run;
-                effects = SpriteEffects.FlipHorizontally;
+                effects = SpriteEffects.None;
             }
             if (keyboard.IsKeyDown(Keys.D))
             {
                 velocity.X += playerSpeed;
                 playerAnimationController = currentAnimation.Run;
-                effects = SpriteEffects.None;
+                effects = SpriteEffects.FlipHorizontally;
             }
         }
         private void Jump(KeyboardState keyboard)
         {
             if (isJumping)
             {
+                
                 velocity.Y += jumpSpeed;//Making it go up
                 jumpSpeed += 1;//Some math (explained later)
                 Move(keyboard);
@@ -99,14 +97,14 @@ namespace Delivery.src
                 {
                     isJumping = true;
                     isFalling = false;
-                    jumpSpeed = -14;//Give it upward thrust
+                    jumpSpeed = -5;//Give it upward thrust
                 }
             }
 
         }
         public override void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-
+            
             switch (playerAnimationController)
             {
                 case currentAnimation.Idle:
@@ -117,7 +115,7 @@ namespace Delivery.src
                     break;
                 case currentAnimation.Jumping:
                     playerAnimation[2].Draw(spriteBatch, position, gameTime, 100, effects);
-
+            
                     break;
                 
             }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Delivery.src
 {
@@ -13,7 +14,7 @@ namespace Delivery.src
         float timeSinceLastFrame = 0;
         float width;
         float height;
-        public Animation(Texture2D spritesheet, float width = 32, float height = 32)
+        public Animation(Texture2D spritesheet, float width, float height)
         {
             this.spritesheet = spritesheet;
             frames = (int)(spritesheet.Width / width);
@@ -26,6 +27,7 @@ namespace Delivery.src
             if (columns < frames)
             {
                 var rect = new Rectangle((int)width * columns, rows, (int)width, (int)width);
+                
                 spriteBatch.Draw(spritesheet, position, rect, Color.White, 0f, new Vector2(), 1f, effect, 1);
                 timeSinceLastFrame += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
@@ -33,7 +35,7 @@ namespace Delivery.src
                 {
                     timeSinceLastFrame -= milisecondsperframes;
                     columns++;
-                    if (columns == frames)
+                    if (columns >= frames)
                     {
                         columns = 0;
                     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
+using System;
 using System.Collections.Generic;
 using TiledSharp;
 
@@ -19,8 +20,11 @@ namespace Delivery.src.levels
         private Rectangle endRect;
         #endregion
 
+        private RenderTarget2D renderTarget;
+
         #region Player
         private Player player;
+        private Texture2D playerIdle;
         
         #endregion
         public Level1(Game game) : base(game) { }
@@ -45,11 +49,11 @@ namespace Delivery.src.levels
                 {
                     collisionRects.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
                 }
-                if (o.Name == "start")
+                else if (o.Name == "start")
                 {
                     startRect = new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height);
                 }
-                if (o.Name == "end")
+                else if (o.Name == "end")
                 {
                     endRect = new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height);
 
@@ -57,13 +61,15 @@ namespace Delivery.src.levels
             }
 
             #endregion
-
+            playerIdle = Content.Load<Texture2D>("player_idle");
             player = new Player(
                new Vector2(startRect.X, startRect.Y),
-               Content.Load<Texture2D>("player_idle"),
+               playerIdle,
                Content.Load<Texture2D>("player_run"),
                Content.Load<Texture2D>("player_jump")
             );
+
+            renderTarget = new RenderTarget2D(GraphicsDevice, 1024, 850);
             base.LoadContent();
         }
 
@@ -82,6 +88,7 @@ namespace Delivery.src.levels
                 if (rect.Intersects(player.playerFallRect))
                 {
                     player.isFalling = false;
+                    
                     break;
                 }
             }
@@ -94,17 +101,32 @@ namespace Delivery.src.levels
                 {
                     player.position = initPos;
                     player.velocity = initPos;
+                    
                     break;
                 }
             }
             #endregion
         }
-        public override void Draw(GameTime gameTime)
+        private void DrawLevel(GameTime gameTime)
         {
+            Game.GraphicsDevice.SetRenderTarget(renderTarget);
             Game.GraphicsDevice.Clear(Colors.SkyBlue);
             Game._spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             tilemapManager.Draw();
+            //Game._spriteBatch.Draw(playerIdle, new Vector2(30, 30), Color.White);
+            player.Draw(Game._spriteBatch, gameTime);
+
             Game._spriteBatch.End();
+            Game.GraphicsDevice.SetRenderTarget(null);
+        }
+        public override void Draw(GameTime gameTime)
+        {
+            DrawLevel(gameTime);
+            Game._spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+
+            Game._spriteBatch.Draw(renderTarget, new Vector2(0, 0), null, Color.White, 0f, new Vector2(), 8f, SpriteEffects.None, 0);
+            Game._spriteBatch.End();
+            
         }
     }
 }

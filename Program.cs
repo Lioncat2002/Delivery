@@ -1,3 +1,3 @@
 ﻿
-using var game = new Delivery.Game1();
+using var game = new Delivery.src.Game1();
 game.Run();

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Delivery
+namespace Delivery.src
 {
     public class Colors
     {

@@ -1,4 +1,6 @@
-﻿using Delivery.src.levels;
+﻿using Apos.Gui;
+using Delivery.src.levels;
+using FontStashSharp;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -12,6 +14,9 @@ namespace Delivery.src
         public GraphicsDeviceManager _graphics;
         public SpriteBatch _spriteBatch;
 
+        public IMGUI _ui;
+
+        public MainMenu mainMenu;
         public Level1 level1;
         public Level2 level2;
 
@@ -30,9 +35,14 @@ namespace Delivery.src
             IsMouseVisible = true;
             level1 = new Level1(this);
             level2 = new Level2(this);
+            mainMenu = new MainMenu(this);
             _screenManager = new ScreenManager();
             
             Components.Add(_screenManager);
+        }
+        private void LoadMainMenu()
+        {
+            _screenManager.LoadScreen(mainMenu, new FadeTransition(GraphicsDevice, Color.White));
         }
         private void LoadScreen1()
         {
@@ -49,16 +59,20 @@ namespace Delivery.src
             _graphics.PreferredBackBufferWidth = 1024;
             _graphics.ApplyChanges();
             base.Initialize();
-            currentLevel=Utils.Level.Level1;
+            currentLevel=Utils.Level.MainMenu;
             hasLevelChanged=true;
             
-            LoadScreen1();
+            LoadMainMenu();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+            #region UI
+            FontSystem fontSystem = new FontSystem();
+            fontSystem.AddFont(TitleContainer.OpenStream($"{Content.RootDirectory}/dogicapixel.ttf")); GuiHelper.Setup(this, fontSystem);
+            _ui = new IMGUI();
+            #endregion
             // TODO: use this.Content to load your game content here
         }
 
@@ -70,6 +84,9 @@ namespace Delivery.src
             if(!hasLevelChanged)
             switch (currentLevel)
             {
+                    case Utils.Level.MainMenu:
+                        LoadMainMenu();
+                        break;
                 case Utils.Level.Level1:
                         gameColor = Color.White;
                         LoadScreen1();

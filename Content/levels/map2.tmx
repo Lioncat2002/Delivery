@@ -23,7 +23,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="Collisions">
-  <object id="1" x="16.3797" y="64.3384" width="84.4073" height="10.7723"/>
+  <object id="1" x="16.3797" y="64.3384" width="88.9073" height="10.7723"/>
   <object id="8" name="start" x="41.8797" y="58.0884" width="5.2823" height="5.0223"/>
   <object id="9" name="end" x="31.8797" y="31.9634" width="7.1573" height="7.8973"/>
   <object id="7" name="kill" x="-136.915" y="81.9121" width="395.407" height="10.7723"/>

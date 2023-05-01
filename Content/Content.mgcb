@@ -13,8 +13,14 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin dogicapixel.ttf
+/copy:dogicapixel.ttf
+
 #begin levels/map1.tmx
 /copy:levels/map1.tmx
+
+#begin levels/map2.tmx
+/copy:levels/map2.tmx
 
 #begin player_idle.png
 /importer:TextureImporter

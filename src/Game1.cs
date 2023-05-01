@@ -18,7 +18,11 @@ namespace Delivery.src
         public Texture2D player;
 
         private readonly ScreenManager _screenManager;
-        
+
+       
+        public Utils.Level currentLevel;
+        public bool hasLevelChanged = false;
+        public Color gameColor=Color.White;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -45,6 +49,9 @@ namespace Delivery.src
             _graphics.PreferredBackBufferWidth = 1024;
             _graphics.ApplyChanges();
             base.Initialize();
+            currentLevel=Utils.Level.Level1;
+            hasLevelChanged=true;
+            
             LoadScreen1();
         }
 
@@ -60,6 +67,22 @@ namespace Delivery.src
             KeyboardState keyboardState = Keyboard.GetState();
             if (keyboardState.IsKeyDown(Keys.Escape))
                 Exit();
+            if(!hasLevelChanged)
+            switch (currentLevel)
+            {
+                case Utils.Level.Level1:
+                        gameColor = Color.White;
+                        LoadScreen1();
+                        hasLevelChanged = true;
+                    
+                    break;
+                case Utils.Level.Level2:
+                        gameColor = Color.White;
+                        LoadScreen2();
+                        hasLevelChanged = true;
+                        
+                    break;
+            }
             //if (keyboardState.IsKeyDown(Keys.A))
             //{
             //    LoadScreen1();

@@ -6,19 +6,21 @@ namespace Delivery.src
 {
     public class Player : Entity
     {
+        
 
         public Vector2 velocity;
         public Rectangle playerFallRect;
         public SpriteEffects effects;
 
-        public float playerSpeed = 1;
-        public float fallSpeed = 1;
-        public float jumpSpeed = -2;
+        public float playerSpeed = 0.5f;
+        public float fallSpeed = 0.7f;
+        public float jumpSpeed = -3;
         public float startY;
 
         public bool isFalling = true;
         public bool isJumping;
-        public bool isShooting;
+        public bool isMovingLeft;
+        public bool jumpedFirst;
 
         public Animation[] playerAnimation;
         public currentAnimation playerAnimationController;
@@ -35,6 +37,7 @@ namespace Delivery.src
             playerAnimation[2] = new Animation(jumpSprite,8,8);
             hitbox = new Rectangle((int)position.X, (int)position.Y,8, 5);
             playerFallRect = new Rectangle((int)position.X, (int)position.Y, 6, 6);
+            isMovingLeft = true;
         }
         public override void Update()
         {
@@ -59,25 +62,40 @@ namespace Delivery.src
         }
         private void Move(KeyboardState keyboard)
         {
-
-            if (keyboard.IsKeyDown(Keys.A))
+            if (jumpedFirst)
             {
-                velocity.X -= playerSpeed;
-                playerAnimationController = currentAnimation.Run;
-                effects = SpriteEffects.None;
+                if (isMovingLeft)
+                {
+                    velocity.X -= playerSpeed;
+                    playerAnimationController = currentAnimation.Run;
+                    effects = SpriteEffects.None;
+                }
+                else
+                {
+                    velocity.X += playerSpeed;
+                    playerAnimationController = currentAnimation.Run;
+                    effects = SpriteEffects.FlipHorizontally;
+                }
             }
-            if (keyboard.IsKeyDown(Keys.D))
-            {
-                velocity.X += playerSpeed;
-                playerAnimationController = currentAnimation.Run;
-                effects = SpriteEffects.FlipHorizontally;
-            }
+           
+            //if (keyboard.IsKeyDown(Keys.A))
+            //{
+            //    velocity.X -= playerSpeed;
+            //    playerAnimationController = currentAnimation.Run;
+            //    effects = SpriteEffects.None;
+            //}
+            //if (keyboard.IsKeyDown(Keys.D))
+            //{
+            //    velocity.X += playerSpeed;
+            //    playerAnimationController = currentAnimation.Run;
+            //    effects = SpriteEffects.FlipHorizontally;
+            //}
         }
         private void Jump(KeyboardState keyboard)
         {
             if (isJumping)
             {
-                
+                jumpedFirst = true;
                 velocity.Y += jumpSpeed;//Making it go up
                 jumpSpeed += 1;//Some math (explained later)
                 Move(keyboard);
@@ -97,7 +115,7 @@ namespace Delivery.src
                 {
                     isJumping = true;
                     isFalling = false;
-                    jumpSpeed = -5;//Give it upward thrust
+                    jumpSpeed = -6;//Give it upward thrust
                 }
             }
 

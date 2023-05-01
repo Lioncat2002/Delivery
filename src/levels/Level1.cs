@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Apos.Gui;
+using FontStashSharp;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
 using System;
@@ -18,18 +20,27 @@ namespace Delivery.src.levels
         private List<Rectangle> collisionRects;
         private Rectangle startRect;
         private Rectangle endRect;
+        private Rectangle killRect;
         #endregion
 
         private RenderTarget2D renderTarget;
 
         #region Player
         private Player player;
-        private Texture2D playerIdle;
-        
+        #endregion
+
+        #region UI
+        private IMGUI _ui;
+        private bool hasWon=false;
         #endregion
         public Level1(Game game) : base(game) { }
         public override void LoadContent()
         {
+            #region UI
+            FontSystem fontSystem = new FontSystem();
+            fontSystem.AddFont(TitleContainer.OpenStream($"{Content.RootDirectory}/dogicapixel.ttf")); GuiHelper.Setup(Game, fontSystem);
+            _ui = new IMGUI();
+            #endregion
             #region Tilemap
             map = new TmxMap("Content\\levels\\map1.tmx");
             tileset = Content.Load<Texture2D>(map.Tilesets[0].Name.ToString());
@@ -58,13 +69,17 @@ namespace Delivery.src.levels
                     endRect = new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height);
 
                 }
+                else if(o.Name == "kill")
+                {
+                    killRect= new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height);
+                }
             }
 
             #endregion
-            playerIdle = Content.Load<Texture2D>("player_idle");
+          
             player = new Player(
                new Vector2(startRect.X, startRect.Y),
-               playerIdle,
+               Content.Load<Texture2D>("player_idle"),
                Content.Load<Texture2D>("player_run"),
                Content.Load<Texture2D>("player_jump")
             );
@@ -76,6 +91,9 @@ namespace Delivery.src.levels
 
         public override void Update(GameTime gameTime)
         {
+            GuiHelper.UpdateSetup(gameTime);
+            _ui.UpdateStart(gameTime);
+            
             #region Player Collisions
             var initPos = player.position;
             player.Update();
@@ -101,16 +119,49 @@ namespace Delivery.src.levels
                 {
                     player.position = initPos;
                     player.velocity = initPos;
-                    
+                    player.isMovingLeft = !player.isMovingLeft;
                     break;
                 }
             }
             #endregion
+
+            #region WinCondition
+            
+            if (endRect.Intersects(player.hitbox))
+            {
+                hasWon = true;
+                player.jumpedFirst = false;
+            }
+            #endregion
+
+            #region LoseCondition
+            if(killRect.Intersects(player.hitbox))
+            {
+                Console.WriteLine("You died");
+            }
+            #endregion
+
+            #region UI
+            if (hasWon)
+            {
+                Game.gameColor = new Color(0.2f, 0.2f, 0.2f, 0.9f);
+                MenuPanel.Push();
+                if (Button.Put("Next Level", 30, Color.AliceBlue).Clicked)
+                {
+                    Game.currentLevel = Utils.Level.Level2;
+                    Game.hasLevelChanged = false;
+                    Game.gameColor = Color.White;
+                }
+                MenuPanel.Pop();
+            }
+            #endregion
+            _ui.UpdateEnd(gameTime);
+            GuiHelper.UpdateCleanup();
         }
         private void DrawLevel(GameTime gameTime)
         {
             Game.GraphicsDevice.SetRenderTarget(renderTarget);
-            Game.GraphicsDevice.Clear(Colors.SkyBlue);
+            Game.GraphicsDevice.Clear(Utils.SkyBlue);
             Game._spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             tilemapManager.Draw();
             //Game._spriteBatch.Draw(playerIdle, new Vector2(30, 30), Color.White);
@@ -123,10 +174,10 @@ namespace Delivery.src.levels
         {
             DrawLevel(gameTime);
             Game._spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-
-            Game._spriteBatch.Draw(renderTarget, new Vector2(0, 0), null, Color.White, 0f, new Vector2(), 8f, SpriteEffects.None, 0);
-            Game._spriteBatch.End();
             
+            Game._spriteBatch.Draw(renderTarget, new Vector2(0, 0), null, Game.gameColor, 0f, new Vector2(), 8f, SpriteEffects.None, 0);
+            Game._spriteBatch.End();
+            _ui.Draw(gameTime);
         }
     }
 }

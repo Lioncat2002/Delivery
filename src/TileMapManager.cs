@@ -36,7 +36,7 @@ namespace Delivery.src
         private void DrawTilemap(GraphicsDevice graphicsDevice)
         {
             graphicsDevice.SetRenderTarget(renderTarget);
-            graphicsDevice.Clear(Colors.SkyBlue);
+            graphicsDevice.Clear(Utils.SkyBlue);
             spriteBatch.Begin();
             for (var i = 0; i < map.TileLayers.Count; i++)
             {

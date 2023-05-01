@@ -19,6 +19,7 @@ namespace Delivery.src
         public MainMenu mainMenu;
         public Level1 level1;
         public Level2 level2;
+        public Level3 level3;
 
         public Texture2D player;
 
@@ -35,6 +36,7 @@ namespace Delivery.src
             IsMouseVisible = true;
             level1 = new Level1(this);
             level2 = new Level2(this);
+            level3 = new Level3(this);
             mainMenu = new MainMenu(this);
             _screenManager = new ScreenManager();
             
@@ -52,6 +54,11 @@ namespace Delivery.src
         private void LoadScreen2()
         {
             _screenManager.LoadScreen(level2, new FadeTransition(GraphicsDevice, Color.White));
+        }
+
+        private void LoadScreen3()
+        {
+            _screenManager.LoadScreen(level3, new FadeTransition(GraphicsDevice, Color.White));
         }
         protected override void Initialize()
         {
@@ -85,31 +92,27 @@ namespace Delivery.src
             switch (currentLevel)
             {
                     case Utils.Level.MainMenu:
+                        gameColor = Color.White;
                         LoadMainMenu();
+                        hasLevelChanged = true;
                         break;
                 case Utils.Level.Level1:
                         gameColor = Color.White;
                         LoadScreen1();
                         hasLevelChanged = true;
-                    
-                    break;
+                     break;
                 case Utils.Level.Level2:
                         gameColor = Color.White;
                         LoadScreen2();
                         hasLevelChanged = true;
-                        
                     break;
+                case Utils.Level.Level3:
+                        gameColor=Color.White;
+                        LoadScreen3();
+                        hasLevelChanged = true;
+                        break;
             }
-            //if (keyboardState.IsKeyDown(Keys.A))
-            //{
-            //    LoadScreen1();
-            //}
-            //else if (keyboardState.IsKeyDown(Keys.S))
-            //{
-            //    LoadScreen2();
-            //}
-            // TODO: Add your update logic here
-
+            
             base.Update(gameTime);
         }
 

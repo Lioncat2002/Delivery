@@ -22,6 +22,9 @@
 #begin levels/map2.tmx
 /copy:levels/map2.tmx
 
+#begin levels/map3.tmx
+/copy:levels/map3.tmx
+
 #begin player_idle.png
 /importer:TextureImporter
 /processor:TextureProcessor

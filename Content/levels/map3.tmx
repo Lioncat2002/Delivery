@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="15" height="15" tilewidth="8" tileheight="8" infinite="0" nextlayerid="3" nextobjectid="14">
+ <tileset firstgid="1" name="tileset" tilewidth="8" tileheight="8" tilecount="27" columns="9">
+  <image source="../tileset.png" width="72" height="24"/>
+ </tileset>
+ <layer id="1" name="Base" width="15" height="15">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,16,0,0,0,
+0,0,0,0,0,0,0,0,0,0,4,6,0,0,0,
+17,0,0,0,0,7,9,0,4,5,14,15,0,0,0,
+4,5,6,0,0,0,0,0,13,14,14,14,5,6,0,
+22,14,15,0,0,0,0,0,13,14,14,14,14,24,0,
+0,13,14,5,5,5,5,5,14,14,14,14,15,0,0,
+0,13,14,14,14,14,14,14,14,14,14,14,15,0,0,
+0,13,14,14,14,14,14,14,14,14,14,14,15,0,0,
+0,22,23,23,23,23,23,23,23,23,23,23,24,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="2" name="Collisions">
+  <object id="1" x="22.8726" y="72.0118" width="43.6048" height="10.7723"/>
+  <object id="8" name="start" x="32.8797" y="64.3384" width="5.2823" height="5.0223"/>
+  <object id="9" name="end" x="88.3797" y="31.8384" width="7.1573" height="7.8973"/>
+  <object id="7" name="kill" x="-133.521" y="99.9151" width="395.407" height="10.7723"/>
+  <object id="4" x="81.895" y="56.0169" width="29.9023" height="15.6965"/>
+  <object id="13" x="80.02" y="39.8919" width="15.7773" height="15.6965"/>
+  <object id="3" x="0.295109" y="56.0469" width="23.5669" height="15.8146"/>
+  <object id="12" x="2.34056" y="48.8196" width="4.06692" height="7.31461"/>
+  <object id="10" x="64.119" y="48.3646" width="16.802" height="23.7464"/>
+  <object id="11" x="39.7078" y="48.1719" width="16.052" height="8.1214"/>
+ </objectgroup>
+</map>

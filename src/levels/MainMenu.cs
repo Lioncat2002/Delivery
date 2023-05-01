@@ -1,5 +1,4 @@
 ﻿using Apos.Gui;
-using FontStashSharp;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Screens;
 

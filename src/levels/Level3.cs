@@ -9,7 +9,7 @@ using TiledSharp;
 
 namespace Delivery.src.levels
 {
-    public class Level2 : GameScreen
+    public class Level3 : GameScreen
     {
         private new Game1 Game => (Game1)base.Game;
 
@@ -33,7 +33,7 @@ namespace Delivery.src.levels
         private IMGUI _ui;
         private bool hasWon = false;
         #endregion
-        public Level2(Game game) : base(game) { }
+        public Level3(Game game) : base(game) { }
         public override void LoadContent()
         {
             #region UI
@@ -42,7 +42,7 @@ namespace Delivery.src.levels
             _ui = new IMGUI();
             #endregion
             #region Tilemap
-            map = new TmxMap("Content\\levels\\map2.tmx");
+            map = new TmxMap("Content\\levels\\map3.tmx");
             tileset = Content.Load<Texture2D>(map.Tilesets[0].Name.ToString());
             int tileWidth = map.Tilesets[0].TileWidth;
             int tileHeight = map.Tilesets[0].TileHeight;
@@ -149,9 +149,9 @@ namespace Delivery.src.levels
                 MenuPanel.Push();
                 if (Button.Put("Next Level", 30, Color.AliceBlue).Clicked)
                 {
-                    Game.currentLevel = Utils.Level.Level3;
+                    Game.currentLevel = Utils.Level.MainMenu;
                     Game.hasLevelChanged = false;
-                    Game.gameColor=Color.White;
+                    Game.gameColor = Color.White;
                 }
                 MenuPanel.Pop();
             }
@@ -175,10 +175,11 @@ namespace Delivery.src.levels
         {
             DrawLevel(gameTime);
             Game._spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-            
+
             Game._spriteBatch.Draw(renderTarget, new Vector2(0, 0), null, Game.gameColor, 0f, new Vector2(), 8f, SpriteEffects.None, 0);
             Game._spriteBatch.End();
             _ui.Draw(gameTime);
         }
     }
 }
+

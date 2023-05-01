@@ -30,12 +30,17 @@ namespace Delivery.src.levels
         #endregion
 
         #region UI
+        private IMGUI _ui;
         private bool hasWon = false;
         #endregion
         public Level2(Game game) : base(game) { }
         public override void LoadContent()
         {
-            
+            #region UI
+            FontSystem fontSystem = new FontSystem();
+            fontSystem.AddFont(TitleContainer.OpenStream($"{Content.RootDirectory}/dogicapixel.ttf")); GuiHelper.Setup(Game, fontSystem);
+            _ui = new IMGUI();
+            #endregion
             #region Tilemap
             map = new TmxMap("Content\\levels\\map2.tmx");
             tileset = Content.Load<Texture2D>(map.Tilesets[0].Name.ToString());
@@ -72,7 +77,12 @@ namespace Delivery.src.levels
 
             #endregion
 
-           
+            player = new Player(
+               new Vector2(startRect.X, startRect.Y),
+               Content.Load<Texture2D>("player_idle"),
+               Content.Load<Texture2D>("player_run"),
+               Content.Load<Texture2D>("player_jump")
+            );
 
             renderTarget = new RenderTarget2D(GraphicsDevice, 1024, 850);
             Game.gameColor = Color.White;
@@ -83,11 +93,11 @@ namespace Delivery.src.levels
         public override void Update(GameTime gameTime)
         {
             GuiHelper.UpdateSetup(gameTime);
-            Game._ui.UpdateStart(gameTime);
+            _ui.UpdateStart(gameTime);
 
             #region Player Collisions
             var initPos = player.position;
-            Game.player.Update();
+            player.Update();
             //y axis
 
             foreach (var rect in collisionRects)
@@ -146,7 +156,7 @@ namespace Delivery.src.levels
                 MenuPanel.Pop();
             }
             #endregion
-            Game._ui.UpdateEnd(gameTime);
+            _ui.UpdateEnd(gameTime);
             GuiHelper.UpdateCleanup();
         }
         private void DrawLevel(GameTime gameTime)
@@ -168,7 +178,7 @@ namespace Delivery.src.levels
             
             Game._spriteBatch.Draw(renderTarget, new Vector2(0, 0), null, Game.gameColor, 0f, new Vector2(), 8f, SpriteEffects.None, 0);
             Game._spriteBatch.End();
-            Game._ui.Draw(gameTime);
+            _ui.Draw(gameTime);
         }
     }
 }

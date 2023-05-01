@@ -6,7 +6,7 @@ namespace Delivery.src
 {
     public class Player : Entity
     {
-        
+
 
         public Vector2 velocity;
         public Rectangle playerFallRect;
@@ -24,12 +24,13 @@ namespace Delivery.src
 
         public Animation[] playerAnimation;
         public currentAnimation playerAnimationController;
-        public Player(Vector2 position, Texture2D idleSprite, Texture2D runSprite,Texture2D jumpSprite)
+        public Player(Texture2D idleSprite, Texture2D runSprite,Texture2D jumpSprite)
         {
             playerAnimation = new Animation[3];
 
-            this.position = position;
+
             velocity = position;
+            velocity = new Vector2();
             effects = SpriteEffects.None;
 
             playerAnimation[0] = new Animation(idleSprite,8,8);

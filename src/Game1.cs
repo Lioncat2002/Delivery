@@ -20,7 +20,7 @@ namespace Delivery.src
         public Level1 level1;
         public Level2 level2;
 
-        public Texture2D player;
+        public Player player;
 
         private readonly ScreenManager _screenManager;
 
@@ -73,6 +73,12 @@ namespace Delivery.src
             fontSystem.AddFont(TitleContainer.OpenStream($"{Content.RootDirectory}/dogicapixel.ttf")); GuiHelper.Setup(this, fontSystem);
             _ui = new IMGUI();
             #endregion
+
+            player = new Player(
+               Content.Load<Texture2D>("player_idle"),
+               Content.Load<Texture2D>("player_run"),
+               Content.Load<Texture2D>("player_jump")
+            );
             // TODO: use this.Content to load your game content here
         }
 

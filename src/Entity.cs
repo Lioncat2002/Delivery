@@ -11,7 +11,7 @@ namespace Delivery.src
             Run,
             Jumping
         }
-        public Vector2 position;
+        public Vector2 position { get; set; }
         public Rectangle hitbox;
 
         public abstract void Update();

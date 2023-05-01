@@ -30,17 +30,11 @@ namespace Delivery.src.levels
         #endregion
 
         #region UI
-        private IMGUI _ui;
         private bool hasWon=false;
         #endregion
         public Level1(Game game) : base(game) { }
         public override void LoadContent()
         {
-            #region UI
-            FontSystem fontSystem = new FontSystem();
-            fontSystem.AddFont(TitleContainer.OpenStream($"{Content.RootDirectory}/dogicapixel.ttf")); GuiHelper.Setup(Game, fontSystem);
-            _ui = new IMGUI();
-            #endregion
             #region Tilemap
             map = new TmxMap("Content\\levels\\map1.tmx");
             tileset = Content.Load<Texture2D>(map.Tilesets[0].Name.ToString());
@@ -76,14 +70,7 @@ namespace Delivery.src.levels
             }
 
             #endregion
-          
-            player = new Player(
-               new Vector2(startRect.X, startRect.Y),
-               Content.Load<Texture2D>("player_idle"),
-               Content.Load<Texture2D>("player_run"),
-               Content.Load<Texture2D>("player_jump")
-            );
-
+            Game.player.position = new Vector2(startRect.X, startRect.Y);
             renderTarget = new RenderTarget2D(GraphicsDevice, 1024, 850);
             base.LoadContent();
         }
@@ -92,20 +79,20 @@ namespace Delivery.src.levels
         public override void Update(GameTime gameTime)
         {
             GuiHelper.UpdateSetup(gameTime);
-            _ui.UpdateStart(gameTime);
+            Game._ui.UpdateStart(gameTime);
             
             #region Player Collisions
-            var initPos = player.position;
-            player.Update();
+            var initPos = Game.player.position;
+            Game.player.Update();
             //y axis
             
             foreach (var rect in collisionRects)
             {
-                if (!player.isJumping)
-                    player.isFalling = true;
-                if (rect.Intersects(player.playerFallRect))
+                if (!Game.player.isJumping)
+                    Game.player.isFalling = true;
+                if (rect.Intersects(Game.player.playerFallRect))
                 {
-                    player.isFalling = false;
+                    Game.player.isFalling = false;
                     
                     break;
                 }
@@ -115,11 +102,11 @@ namespace Delivery.src.levels
             //x axis
             foreach (var rect in collisionRects)
             {
-                if (rect.Intersects(player.hitbox))
+                if (rect.Intersects(Game.player.hitbox))
                 {
-                    player.position = initPos;
-                    player.velocity = initPos;
-                    player.isMovingLeft = !player.isMovingLeft;
+                    Game.player.position = initPos;
+                    Game.player.velocity = initPos;
+                    Game.player.isMovingLeft = !Game.player.isMovingLeft;
                     break;
                 }
             }
@@ -127,15 +114,15 @@ namespace Delivery.src.levels
 
             #region WinCondition
             
-            if (endRect.Intersects(player.hitbox))
+            if (endRect.Intersects(Game.player.hitbox))
             {
                 hasWon = true;
-                player.jumpedFirst = false;
+                Game.player.jumpedFirst = false;
             }
             #endregion
 
             #region LoseCondition
-            if(killRect.Intersects(player.hitbox))
+            if(killRect.Intersects(Game.player.hitbox))
             {
                 Console.WriteLine("You died");
             }
@@ -155,7 +142,7 @@ namespace Delivery.src.levels
                 MenuPanel.Pop();
             }
             #endregion
-            _ui.UpdateEnd(gameTime);
+            Game._ui.UpdateEnd(gameTime);
             GuiHelper.UpdateCleanup();
         }
         private void DrawLevel(GameTime gameTime)
@@ -165,7 +152,7 @@ namespace Delivery.src.levels
             Game._spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             tilemapManager.Draw();
             //Game._spriteBatch.Draw(playerIdle, new Vector2(30, 30), Color.White);
-            player.Draw(Game._spriteBatch, gameTime);
+            Game.player.Draw(Game._spriteBatch, gameTime);
 
             Game._spriteBatch.End();
             Game.GraphicsDevice.SetRenderTarget(null);
@@ -177,7 +164,7 @@ namespace Delivery.src.levels
             
             Game._spriteBatch.Draw(renderTarget, new Vector2(0, 0), null, Game.gameColor, 0f, new Vector2(), 8f, SpriteEffects.None, 0);
             Game._spriteBatch.End();
-            _ui.Draw(gameTime);
+            Game._ui.Draw(gameTime);
         }
     }
 }
